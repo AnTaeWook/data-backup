@@ -15,16 +15,14 @@ public class DataGenerator {
     private final EntityManager entityManager;
 
     @Transactional
-    public void generate() throws InterruptedException {
+    public void generateUnit(long primaryKey, int unit) throws InterruptedException {
         Random random = new Random();
-        long primaryKey = 1L;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < unit; i++) {
             entityManager.createNativeQuery("INSERT INTO random_number (id, number, stamp) values (?, ?, ?)")
                     .setParameter(1, primaryKey++)
                     .setParameter(2, random.nextLong())
                     .setParameter(3, LocalDateTime.now())
                     .executeUpdate();
-
             Thread.sleep(100);
         }
     }
