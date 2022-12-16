@@ -9,10 +9,15 @@ import org.springframework.stereotype.Component;
 public class App {
 
     private final DataGenerator dataGenerator;
+    private final int UNIT = 10;
 
     @PostConstruct
     public void init() throws InterruptedException {
-        dataGenerator.generate();
+        long primaryKey = 1L;
+        for (int i = 0; i < 10; i++) {
+            dataGenerator.generateUnit(primaryKey, UNIT);
+            primaryKey += UNIT;
+        }
     }
 
 }
