@@ -19,7 +19,7 @@ public class MyServer {
     static final int PORT = 9090;
     Socket child;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public void serve() throws IOException {
         serverSocket = new ServerSocket(PORT);
 
@@ -29,55 +29,36 @@ public class MyServer {
 
         while (true) {
             child = serverSocket.accept();
-            ServerThread serverThread = new ServerThread(child);
-            Thread thread = new Thread(serverThread);
+            Thread thread = new ServerThread(child);
             thread.start();
         }
     }
 }
 
-class ServerThread implements Runnable {
+class ServerThread extends Thread {
 
     Socket child;
-
-    InputStream inputStream;
-    ObjectInputStream objectInputStream;
-
-    OutputStream outputStream;
-    ObjectOutputStream objectOutputStream;
+    BufferedReader input;
+    PrintWriter output;
 
     public ServerThread(Socket child) throws IOException {
         this.child = child;
-        System.out.println("=== 클라이언트 연결됨 " + child.getInetAddress());
+        System.out.println("=== 클라이언트 연결됨 " + child.getInetAddress() + " ===");
 
-        inputStream = child.getInputStream();
-        objectInputStream = new ObjectInputStream(inputStream);
-
-        outputStream = child.getOutputStream();
-        objectOutputStream = new ObjectOutputStream(outputStream);
+        input = new BufferedReader(new InputStreamReader(child.getInputStream()));
+        output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(child.getOutputStream())));
     }
 
     @Override
     public void run() {
         try {
             while (true) {
-                String data = (String) objectInputStream.readObject();
+                System.out.println("데이터 수신 대기");
+                String data = input.readLine();
                 System.out.println("데이터 수신 " + data);
-                objectOutputStream.writeObject(data);
-                objectOutputStream.flush();
             }
         } catch (Exception e) {
             System.out.println("클라이언트가 종료됨");
-        } finally {
-
-            try {
-                inputStream.close();
-                outputStream.close();
-                objectInputStream.close();
-                objectOutputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 }
