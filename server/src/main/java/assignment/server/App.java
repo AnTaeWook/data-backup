@@ -13,7 +13,7 @@ public class App {
     private final MyServer myServer;
 
     @PostConstruct
-    public void init() throws IOException {
+    public void init() throws IOException, InterruptedException {
         myServer.serve();
     }
 
