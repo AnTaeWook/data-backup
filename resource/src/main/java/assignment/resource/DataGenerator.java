@@ -19,7 +19,7 @@ public class DataGenerator {
         Random random = new Random();
         long primaryKey = 1L;
         for (int i = 0; i < 100; i++) {
-            entityManager.createNativeQuery("INSERT INTO random_number (id, number, timestamp) values (?, ?, ?)")
+            entityManager.createNativeQuery("INSERT INTO random_number (id, number, stamp) values (?, ?, ?)")
                     .setParameter(1, primaryKey++)
                     .setParameter(2, random.nextLong())
                     .setParameter(3, LocalDateTime.now())
