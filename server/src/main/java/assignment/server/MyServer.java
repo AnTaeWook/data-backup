@@ -65,7 +65,7 @@ class ServerThread extends Thread {
         } catch (NoResultException e) {
             output.println("transmission end");
             output.flush();
-            System.out.println(e.getMessage());
+            log.info("데이터 전송 종료 사유: {}", e.getMessage());
         } catch (Exception e) {
             log.info("데이터 전송 종료 사유: {}", e.getMessage());
         }
