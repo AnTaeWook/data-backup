@@ -15,9 +15,9 @@ public class DataGenerator {
     private final EntityManager entityManager;
 
     @Transactional
-    public void generateUnit(long primaryKey, int unit) throws InterruptedException {
+    public void generateUnit(long primaryKey, int dataCountPerTransaction) throws InterruptedException {
         Random random = new Random();
-        for (int i = 0; i < unit; i++) {
+        for (int i = 0; i < dataCountPerTransaction; i++) {
             entityManager.createNativeQuery("INSERT INTO random_number (id, number, stamp) values (?, ?, ?)")
                     .setParameter(1, primaryKey++)
                     .setParameter(2, random.nextLong())
