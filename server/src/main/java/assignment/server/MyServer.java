@@ -27,9 +27,9 @@ public class MyServer {
     public void serve() throws IOException, InterruptedException {
         serverSocket = new ServerSocket(PORT);
 
-        log.info("========================");
-        log.info("===== 데이터 전송 서버 =====");
-        log.info("========================");
+        log.info("================================");
+        log.info("========= 데이터 전송 서버 =========");
+        log.info("================================");
 
         while (true) {
             child = serverSocket.accept();
@@ -67,7 +67,7 @@ class ServerThread extends Thread {
             output.flush();
             System.out.println(e.getMessage());
         } catch (Exception e) {
-            log.info(e.getMessage());
+            log.info("데이터 전송 종료 사유: {}", e.getMessage());
         }
     }
 
@@ -76,14 +76,14 @@ class ServerThread extends Thread {
         while (true) {
             List<RandomNumber> resultList = getResultList(offset);
             if (resultList.isEmpty()) {
-                throw new NoResultException("resource 서버에 데이터가 없습니다.");
+                throw new NoResultException("소스 서버에 더 읽을 데이터가 없습니다");
             }
 
             for (RandomNumber data : resultList) {
                 output.println(data.getId() + " " + data.getNumber() + " " + data.getStamp());
                 output.flush();
                 if (input.readLine() == null) {
-                    throw new SocketException("클라이언트와의 통신이 중단되었습니다.");
+                    throw new SocketException("클라이언트와의 통신이 중단되었습니다");
                 }
                 sleep(1000);
             }
